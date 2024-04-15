@@ -1,7 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using RangeManagementSystem.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<DbContext, RangeManagementSystemDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
