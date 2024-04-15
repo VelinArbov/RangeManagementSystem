@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RangeManagementSystem.Data.Models;
+using System.Reflection.Emit;
 
 namespace RangeManagementSystem.Data
 {
@@ -20,6 +21,9 @@ namespace RangeManagementSystem.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Reservation>()
+              .HasKey(x => new { x.AmmunitionId, x.WeaponId});
+
             base.OnModelCreating(builder);
         }
     }

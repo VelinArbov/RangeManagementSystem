@@ -25,7 +25,7 @@ namespace RangeManagementSystem.Controllers
 
         public IActionResult Register()
         {
-            return View("Register");
+            return View("/Areas/Identity/Pages/Account/Register.cshtml");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
