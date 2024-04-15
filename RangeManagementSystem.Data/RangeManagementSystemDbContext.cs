@@ -9,7 +9,13 @@ namespace RangeManagementSystem.Data
         public RangeManagementSystemDbContext(DbContextOptions<RangeManagementSystemDbContext> options)
          : base(options)
         {
+
         }
+
+        public DbSet<Weapon> Weapons { get; set; }
+        public DbSet<Ammunition> Ammunitions { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<ShootingEvent> ShootingEvents { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
