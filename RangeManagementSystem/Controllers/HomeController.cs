@@ -20,12 +20,12 @@ namespace RangeManagementSystem.Controllers
 
         public IActionResult Login()
         {
-            return View("Login");
+            return View("/Views/Login/Index.cshtml");
         }
 
         public IActionResult Register()
         {
-            return View("/Areas/Identity/Pages/Account/Register.cshtml");
+            return View("/Views/Register/Index.cshtml");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

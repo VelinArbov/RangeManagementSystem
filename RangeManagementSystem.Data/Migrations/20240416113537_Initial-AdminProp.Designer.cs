@@ -12,8 +12,8 @@ using RangeManagementSystem.Data;
 namespace RangeManagementSystem.Data.Migrations
 {
     [DbContext(typeof(RangeManagementSystemDbContext))]
-    [Migration("20240415131201_Initial-Models")]
-    partial class InitialModels
+    [Migration("20240416113537_Initial-AdminProp")]
+    partial class InitialAdminProp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -241,6 +241,9 @@ namespace RangeManagementSystem.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
@@ -485,7 +488,7 @@ namespace RangeManagementSystem.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("RangeManagementSystem.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
+                        .WithMany("Reservations")
                         .HasForeignKey("ApplicationUserId1");
 
                     b.HasOne("RangeManagementSystem.Data.Models.Weapon", "Weapons")
@@ -504,7 +507,7 @@ namespace RangeManagementSystem.Data.Migrations
             modelBuilder.Entity("RangeManagementSystem.Data.Models.ShootingEvent", b =>
                 {
                     b.HasOne("RangeManagementSystem.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
+                        .WithMany("ShootingEvents")
                         .HasForeignKey("ApplicationUserId1");
 
                     b.Navigation("ApplicationUser");
@@ -516,7 +519,11 @@ namespace RangeManagementSystem.Data.Migrations
 
                     b.Navigation("Logins");
 
+                    b.Navigation("Reservations");
+
                     b.Navigation("Roles");
+
+                    b.Navigation("ShootingEvents");
                 });
 #pragma warning restore 612, 618
         }

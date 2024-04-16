@@ -16,9 +16,12 @@ namespace RangeManagementSystem.Data.Models
         public DateTime? ModifiedOn { get; set; }
         // Deletable entity
         public bool IsDeleted { get; set; }
+        public bool IsAdmin { get; set; }
         public DateTime? DeletedOn { get; set; }
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+        public virtual List<Reservation> Reservations { get; set; } = new ();
+        public virtual List<ShootingEvent> ShootingEvents { get; set; } = new ();
     }
 }

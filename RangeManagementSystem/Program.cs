@@ -1,5 +1,10 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using RangeManagementSystem.Data;
+using RangeManagementSystem.Data.Models;
+using RangeManagementSystem.Web.Services.Register;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DbContext, RangeManagementSystemDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+       .AddEntityFrameworkStores<RangeManagementSystemDbContext>()
+       .AddDefaultTokenProviders();
+
+// Application services
+builder.Services.AddScoped<UserManager<ApplicationUser>>();
+builder.Services.AddScoped<RoleManager<ApplicationRole>>();
+builder.Services.AddTransient<IRegisterService, RegisterService>();
 
 var app = builder.Build();
 
@@ -18,11 +32,21 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Seed data on application startup
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider.GetRequiredService<RangeManagementSystemDbContext>();
+if (app.Environment.IsDevelopment())
+{
+    services.Database.Migrate();
+    new ApplicationDbContextSeeder().SeedAsync(services, scope.ServiceProvider).GetAwaiter().GetResult();
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

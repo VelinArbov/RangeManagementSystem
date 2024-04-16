@@ -24,6 +24,7 @@ namespace RangeManagementSystem.Data
             builder.Entity<Reservation>()
               .HasKey(x => new { x.AmmunitionId, x.WeaponId});
 
+
             base.OnModelCreating(builder);
         }
     }

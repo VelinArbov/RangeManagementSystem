@@ -1,4 +1,5 @@
 ﻿using RangeManagementSystem.Data.Common.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RangeManagementSystem.Data.Models
 {
