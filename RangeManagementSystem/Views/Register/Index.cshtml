@@ -1,28 +1,41 @@
 ﻿@using RangeManagementSystem.Web.Models
 @model RegisterInputViewModel
-@{
-    Layout = null;
-}
 
-<div style="display:flex; justify-content: center">
-    @using (Html.BeginForm("Register", "Register", FormMethod.Post))
-    {
-        @Html.LabelFor(m => m.Username)
-        @Html.TextBoxFor(m => m.Username)
-        @Html.ValidationMessageFor(m => m.Username)
-        <br />
-        @Html.LabelFor(m => m.Email)
-        @Html.TextBoxFor(m => m.Email)
-        @Html.ValidationMessageFor(m => m.Email)
-        <br />
-        @Html.LabelFor(m => m.Password)
-        @Html.PasswordFor(m => m.Password)
-        @Html.ValidationMessageFor(m => m.Password)
-        <br / >
-        @Html.LabelFor(m => m.ConfirmPassword)
-        @Html.PasswordFor(m => m.ConfirmPassword)
-        @Html.ValidationMessageFor(m => m.ConfirmPassword)
-        <br />
-        <button type="submit" class="btn btn-primary" style="margin-top: 20px; text-align: center;">Регистрирай ме</button>
+
+<style>
+    .half-width {
+        width: 50%;
     }
+</style>
+
+<h2 style="text-align:center">Регистрация</h2>
+<div style="display:flex; justify-content: center;margin-top:50px">
+    <div style="min-width: 400px">
+        @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+        {
+            <div style="margin-bottom: 10px; display:flex">
+                @Html.LabelFor(m => m.Username, new { @class = "half-width" })
+                @Html.TextBoxFor(m => m.Username, new { @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Username)
+            </div>
+            <div style="display:flex;margin-bottom: 10px;">
+                @Html.LabelFor(m => m.Password, new { @class = "half-width" })
+                @Html.PasswordFor(m => m.Password, new { @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+            <div style="display:flex;margin-bottom: 10px;">
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "half-width" })
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
+            </div>
+            <div style="display:flex">
+                @Html.LabelFor(m => m.Email, new { @class = "half-width" })
+                @Html.PasswordFor(m => m.Email, new { @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+            <div style="display:flex; justify-content: center">
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px; text-align: center;">Регистрирай ме</button>
+            </div>
+        }
+    </div>
 </div>

@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using RangeManagementSystem.Data;
 using RangeManagementSystem.Data.Models;
 using RangeManagementSystem.Web.Services.Register;
-using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +15,8 @@ builder.Services.AddDbContext<DbContext, RangeManagementSystemDbContext>(options
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
        .AddEntityFrameworkStores<RangeManagementSystemDbContext>()
        .AddDefaultTokenProviders();
+
+builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 
 // Application services
 builder.Services.AddScoped<UserManager<ApplicationUser>>();

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using RangeManagementSystem.Data.Models;
 using RangeManagementSystem.Data;
 using RangeManagementSystem.Web.Models;
+using AutoMapper;
+using System.Security.Claims;
 
 namespace RangeManagementSystem.Web.Controllers
 {
@@ -11,15 +13,18 @@ namespace RangeManagementSystem.Web.Controllers
         private readonly RangeManagementSystemDbContext _dbContext;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
 
         public LoginController(RangeManagementSystemDbContext dbContext,
             SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IMapper mapper)
         {
 
             _dbContext = dbContext;
             _signInManager = signInManager;
             _userManager = userManager;
+            _mapper = mapper;
         }
   
         public IActionResult Index()
@@ -32,21 +37,40 @@ namespace RangeManagementSystem.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password,true, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, lockoutOnFailure: true);
                 var user = await this._userManager.FindByNameAsync(model.Username);
-                if(result.Succeeded && user != null)
-                {
+                if (result.Succeeded && user != null)
+                {                
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    ViewData["UserId"] = userId;
                     if (user.IsAdmin)
                     {
-
+                        return View("/Views/Admin/Index.cshtml", new WeaponsViewModel());
                     }
                     else
-                    {
-
+                    { 
+                        return View("/Views/Client/Dashboard.cshtml");
                     }
                 }
             }
-            return View("Index");
+         
+            return View("Index", model);
+        }
+
+        public async Task<IActionResult> SignOutUser(string userId)
+        {
+            // Find the user by userId if necessary
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                // Handle the case where user is not found
+                return NotFound();
+            }
+
+            // Sign out the user
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Home"); // Redirect to a specific page after sign out
         }
     }
 }

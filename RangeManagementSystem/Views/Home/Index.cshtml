@@ -1,4 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using RangeManagementSystem.Data.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -9,7 +14,16 @@
     </p>
 </div>
 
-<div class="text-center" style="margin-top:30px">
-    <a class="btn btn-primary"  asp-action="Login">Вход</a>
-    <a class="btn btn-primary" asp-action="Register">Регистрация</a>
-</div>
+@if (this.SignInManager.IsSignedIn(this.User))
+{
+    <p class="welcome-title" style="margin-top:10px">
+        @this.User.Identity.Name
+    </p>
+}
+else
+{
+    <div class="text-center" style="margin-top:30px">
+        <a class="btn btn-primary" href="@Url.Action("Index", "Login")">Вход</a>
+        <a class="btn btn-primary" href="@Url.Action("Index", "Register")">Регистрация</a>
+    </div>
+}
