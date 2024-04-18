@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RangeManagementSystem.Data.Models;
 using RangeManagementSystem.Data;
 using RangeManagementSystem.Web.Models;
+using System.Web;
 
 namespace RangeManagementSystem.Web.Controllers
 {
@@ -39,9 +40,21 @@ namespace RangeManagementSystem.Web.Controllers
         {
             if (selectedProducts.Count > 0)
             {
-                return RedirectToAction("Index", "Ammonution", routeValues: new ReservationViewModel { Weapons = selectedProducts, StartDate = startDate, EndDate = endDate });
+                // Construct the URL with query string parameters
+                var url = Url.Action("Index", "Ammonution", new { startDate, endDate });
+
+                // Append selected products as query string parameters
+                foreach (var item in selectedProducts)
+                {
+                    url += $"&Weapons[{item.Key}]={HttpUtility.UrlEncode(item.Value)}";
+                }
+
+                // Redirect to the constructed URL
+                return Redirect(url);
             }
-            return NotFound();
+
+            // Handle the case where no products are selected
+            return RedirectToAction("Index", "Home");
         }
     }
 }

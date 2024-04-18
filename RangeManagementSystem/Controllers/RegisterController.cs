@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RangeManagementSystem.Data;
 using RangeManagementSystem.Data.Models;
 using RangeManagementSystem.Web.Models;
+using System.Security.Claims;
 
 namespace RangeManagementSystem.Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace RangeManagementSystem.Web.Controllers
         }
 
         // GET: RegisterController
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -37,8 +38,15 @@ namespace RangeManagementSystem.Web.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-
-
+                    //Login
+                    var check = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, lockoutOnFailure: true);
+                    var newUser = await this._userManager.FindByNameAsync(model.Username);
+                    if (result.Succeeded && user != null)
+                    {
+                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        ViewData["UserId"] = userId;
+                        return RedirectToAction("Dashboard", "Client");
+                    }
                 }
             }
             return View("Index");

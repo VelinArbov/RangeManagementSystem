@@ -9,6 +9,7 @@ namespace RangeManagementSystem.Web.Mapper
         public MapperProfile()
         {
             CreateMap<Weapon, WeaponViewModel>();
+            CreateMap<Ammunition, AmmunitionViewModel>();
             CreateMap<ShootingEvent, ShootingEventViewModel>()
                 .ForMember(x => x.OrganizerName, y =>
                 y.MapFrom(s => s.ApplicationUser.UserName))

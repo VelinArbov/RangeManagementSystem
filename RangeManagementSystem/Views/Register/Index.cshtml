@@ -11,7 +11,7 @@
 <h2 style="text-align:center">Регистрация</h2>
 <div style="display:flex; justify-content: center;margin-top:50px">
     <div style="min-width: 400px">
-        @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+        @using (Html.BeginForm("Register", "Register", FormMethod.Post))
         {
             <div style="margin-bottom: 10px; display:flex">
                 @Html.LabelFor(m => m.Username, new { @class = "half-width" })
@@ -30,7 +30,7 @@
             </div>
             <div style="display:flex">
                 @Html.LabelFor(m => m.Email, new { @class = "half-width" })
-                @Html.PasswordFor(m => m.Email, new { @class = "half-width" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "half-width" })
                 @Html.ValidationMessageFor(m => m.Email)
             </div>
             <div style="display:flex; justify-content: center">

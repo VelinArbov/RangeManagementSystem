@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RangeManagementSystem.Data;
@@ -17,6 +18,14 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
        .AddDefaultTokenProviders();
 
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Login"; // Change the login path
+    options.LogoutPath = "/Login/Logout"; // Change the logout path
+    options.AccessDeniedPath = "/Account/AccessDenied"; // Change the access denied path
+    options.ReturnUrlParameter = "/Home"; // Change the return URL parameter name
+});
 
 // Application services
 builder.Services.AddScoped<UserManager<ApplicationUser>>();

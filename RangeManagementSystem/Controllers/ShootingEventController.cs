@@ -5,9 +5,11 @@ using RangeManagementSystem.Data.Models;
 using RangeManagementSystem.Data;
 using RangeManagementSystem.Web.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RangeManagementSystem.Web.Controllers
 {
+    [Authorize]
     public class ShootingEventController : Controller
     {
         private readonly RangeManagementSystemDbContext _dbContext;
@@ -20,7 +22,6 @@ namespace RangeManagementSystem.Web.Controllers
             UserManager<ApplicationUser> userManager,
             IMapper mapper)
         {
-
             _dbContext = dbContext;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -38,10 +39,32 @@ namespace RangeManagementSystem.Web.Controllers
             var userId = _userManager.GetUserId(User);
             var shootingEvents = _dbContext.ShootingEvents
             .Include(e => e.ApplicationUser)
-            .Where(e => e.EndTime >= DateTime.Today)
+            .Where(e => e.EndTime >= DateTime.Today && e.StartTime <= DateTime.Today)
             .ToList();
             var events = _mapper.Map<List<ShootingEventViewModel>>(shootingEvents);
             return View(new ShootingEventsViewModel { Events = events});
+        }
+
+        public ActionResult FutureEvents()
+        {
+            var userId = _userManager.GetUserId(User);
+            var shootingEvents = _dbContext.ShootingEvents
+            .Include(e => e.ApplicationUser)
+            .Where(e => e.StartTime > DateTime.Today)
+            .ToList();
+            var events = _mapper.Map<List<ShootingEventViewModel>>(shootingEvents);
+            return View(new ShootingEventsViewModel { Events = events });
+        }
+
+        public ActionResult PastEvents()
+        {
+            var userId = _userManager.GetUserId(User);
+            var shootingEvents = _dbContext.ShootingEvents
+            .Include(e => e.ApplicationUser)
+            .Where(e => e.EndTime < DateTime.Today)
+            .ToList();
+            var events = _mapper.Map<List<ShootingEventViewModel>>(shootingEvents);
+            return View(new ShootingEventsViewModel { Events = events });
         }
 
         // POST: ShootingEvent/Create

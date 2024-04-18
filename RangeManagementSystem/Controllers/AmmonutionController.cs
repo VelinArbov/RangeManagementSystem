@@ -26,22 +26,55 @@ namespace RangeManagementSystem.Web.Controllers
             _mapper = mapper;
         }
         // GET: AmmonutionController
-        public ActionResult Index(ReservationViewModel model)
+        public ActionResult Index(DateTime startDate, DateTime endDate, Dictionary<int, string> Weapons)
         {
+            var weaponTypes = Weapons.Values;
+            var ammoForSelectedWeapons = _dbContext.Ammunitions.Where(x => weaponTypes.Contains(x.Type)).ToList();
+            var mappedAmmo = _mapper.Map<List<AmmunitionViewModel>>(ammoForSelectedWeapons);
+            foreach (var ammo in mappedAmmo)
+            {              
+                if (Weapons.Values.Contains(ammo.Type))
+                {
+                    ammo.WeaponId = Weapons.FirstOrDefault(x => x.Value == ammo.Type).Key;
+                }
+            }
+
+            var model = new ReservationViewModel
+            {            
+                Weapons = Weapons,
+                StartDate = startDate,
+                EndDate = endDate,
+                Ammunitions = mappedAmmo
+            };
             return View(model);
         }
 
-        // POST: WeaponController/Reserve
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Reserve(Dictionary<int, string> selectedProducts, DateTime startDate, DateTime endDate)
-        //{
-        //    if (selectedProducts.Count > 0)
-        //    {
-        //        return RedirectToAction("Index", "Ammonution", new ReservationViewModel { Weapons = selectedProducts, StartDate = startDate, EndDate = endDate });
-        //    }
-        //    return Ok();
-        //}
+       [HttpPost]
+       [ValidateAntiForgeryToken]
+        public ActionResult Reserve(Dictionary<int, string> selectedProducts, DateTime startDate, DateTime endDate)
+        {
+            if (selectedProducts.Count > 0)
+            {
+                var id = _userManager.GetUserId(User);
+                foreach (var item in selectedProducts)
+                {
+                    var resr = new Reservation
+                    {
+                        WeaponId = item.Key,
+                        StartTime = startDate,
+                        EndTime = endDate,
+                        Description = "Lorem ipsun",
+                        ApplicationUserId = id,
+                        AmmunitionId = int.Parse(item.Value)
+                    };
+
+                    _dbContext.Reservations.Add(resr);
+                }
+                _dbContext.SaveChanges();
+                return RedirectToAction("Index", "Ammonution", new ReservationViewModel { Weapons = selectedProducts, StartDate = startDate, EndDate = endDate });
+            }
+            return Ok();
+        }
 
     }
 }

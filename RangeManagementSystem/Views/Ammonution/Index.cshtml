@@ -1,7 +1,87 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using RangeManagementSystem.Web.Models
+@model ReservationViewModel
 @{
-}
+    ViewBag.Title = "Добавяне на амуниций";
+    var selectedProductsAndAmmoTypes = new Dictionary<int, string>();
 
-<h1> AMMMO VIEW</h1>
+}
+<style>
+    /* Style for selected rows */
+    .selected {
+        background-color: #cce5ff; /* Light blue background */
+    }
+
+    .disabled {
+        opacity: 0.5; /* Reduce opacity to visually indicate disabled state */
+        pointer-events: none; /* Disable pointer events to prevent interaction */
+    }
+</style>
+
+<input type="date" hidden name="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+<input type="date" hidden name="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+<h3 style="text-align:center; margin-bottom: 30px;"> Добавяне на амуниции</h3>
+@if (Model.Ammunitions.Any())
+{
+    @using (Html.BeginForm("Reserve", "Ammonution", FormMethod.Post, new { id = "selectedProductsForm" }))
+    {
+        <table class="table" id="weaponsTable">
+            <thead>
+                <tr>
+                    <th>Калибър</th>
+                    <th>Tип</th>
+                    <th>Брой</th>
+                    <th>Свободен</th>
+                    <th></th> <!-- Add a new header for checkboxes -->
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Ammunitions)
+                {
+                    <tr>
+                        <td>@item.Caliber</td>
+                        <td>@item.Type</td>
+                        <td>@item.Quantity</td>
+                        <td>@(item.Availability ? "Да" : "Не")</td>
+                        <td>
+                            <input type="checkbox" name="selectedProducts[@item.Id]" value="@item.WeaponId" data-id="@item.Id" class="product-checkbox" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div style="display:flex;justify-content: center;">
+            <button type="submit" id="submitBtn">Добави амуниций</button>
+        </div>    
+    }
+}
+else
+{
+    <div style="display:flex; justify-content: center;margin-top:30px ">
+        <h1 id="txtResult">Няма подходящи амуницй</h1>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var submitBtn = document.getElementById('submitBtn');
+
+        // Event listener for form submission
+        submitBtn.addEventListener('click', function (e) {
+            var selectedWeapons = document.querySelectorAll('input[type="checkbox"]:checked')
+            if (selectedWeapons.length === 0) {
+                event.preventDefault(); // Prevent form submission
+                alert('Моля, изберете поне едни амуницй.'); // Display alert
+            }
+            else {
+                e.preventDefault();
+                sendSelectedProducts();
+            }
+        });
+
+        // Function to gather selected product IDs and submit the form
+        function sendSelectedProducts() {
+            var form = document.getElementById('selectedProductsForm');
+            form.submit();
+        }
+    });
+</script>

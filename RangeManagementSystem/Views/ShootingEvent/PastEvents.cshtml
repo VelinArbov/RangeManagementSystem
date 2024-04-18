@@ -1,0 +1,45 @@
+﻿@using RangeManagementSystem.Web.Models
+@model ShootingEventsViewModel
+@{
+}
+<h3 style="text-align:center; margin-bottom:20px">Минали стрелби</h3>
+@{
+    ViewBag.Title = "Минали стрелби";
+}
+
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: 71fr 729fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .list-box {
+        margin: 10px;
+        width: 700px;
+        grid-column: span 2;
+        align-self: start;
+    }
+</style>
+<div style="display:flex;justify-content: center">
+    <div class="grid-container">
+        <!-- Списък с организирани стрелби -->
+        <div class="list-box">
+            <ul id="shootingEventsListBox" class="list-group" multiple="multiple">
+                @foreach (var shootingEvent in Model.Events)
+                {
+                    <li class="list-group-item shooting-event" data-id="@shootingEvent.Id">
+                        <div>
+                            <p>Организатор: @shootingEvent.OrganizerName</p>
+                            <p>Дата: от @shootingEvent.StartDate.ToShortDateString() до @shootingEvent.EndDate.ToShortDateString()</p>
+                            <p>Мин. участници: @shootingEvent.MinParticipants</p>
+                            <p>Макс. участници: @shootingEvent.MaxParticipants</p>
+                            <input type="hidden" name="selectedEventIds" id="selectedEventIds">
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

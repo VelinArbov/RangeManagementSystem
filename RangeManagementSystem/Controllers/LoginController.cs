@@ -10,7 +10,6 @@ namespace RangeManagementSystem.Web.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly RangeManagementSystemDbContext _dbContext;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
@@ -21,7 +20,6 @@ namespace RangeManagementSystem.Web.Controllers
             IMapper mapper)
         {
 
-            _dbContext = dbContext;
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
@@ -57,15 +55,8 @@ namespace RangeManagementSystem.Web.Controllers
             return View("Index", model);
         }
 
-        public async Task<IActionResult> SignOutUser(string userId)
+        public async Task<IActionResult> Logout(string userId)
         {
-            // Find the user by userId if necessary
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                // Handle the case where user is not found
-                return NotFound();
-            }
 
             // Sign out the user
             await _signInManager.SignOutAsync();

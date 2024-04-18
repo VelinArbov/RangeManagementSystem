@@ -45,7 +45,7 @@
                     @foreach (var shootingEvent in Model.Events)
                     {
                         <li class="list-group-item shooting-event" data-id="@shootingEvent.Id">
-                            <div>                              
+                            <div>
                                 <p>Организатор: @shootingEvent.OrganizerName</p>
                                 <p>Дата: от @shootingEvent.StartDate.ToShortDateString() до @shootingEvent.EndDate.ToShortDateString()</p>
                                 <p>Мин. участници: @shootingEvent.MinParticipants</p>
@@ -67,21 +67,27 @@
 
 @section scripts {
     <script>
-          // Toggle selected class on click
-    document.querySelectorAll('.shooting-event').forEach(function(event) {
-        event.addEventListener('click', function() {
-            event.classList.toggle('selected');
+        // Toggle selected class on click
+        document.querySelectorAll('.shooting-event').forEach(function (event) {
+            event.addEventListener('click', function () {
+                event.classList.toggle('selected');
+            });
         });
-    });
 
-    // Function to submit selected events
-    function submitSelectedEvents() {
-        var selectedEventIds = [];
-        document.querySelectorAll('.shooting-event.selected').forEach(function(event) {
-            selectedEventIds.push(event.getAttribute('data-id'));
-        });
-        document.getElementById('selectedEventIds').value = selectedEventIds.join(',');
-        document.getElementById('selectedProductsForm').submit();
-    }
+        // Function to submit selected events
+        function submitSelectedEvents() {
+            var selectedEventIds = [];
+            document.querySelectorAll('.shooting-event.selected').forEach(function (event) {
+                selectedEventIds.push(event.getAttribute('data-id'));
+            });
+            if (selectedEventIds.length > 0) {
+                document.getElementById('selectedEventIds').value = selectedEventIds.join(',');
+                document.getElementById('selectedProductsForm').submit();
+            } else {
+                event.preventDefault(); // Prevent form submission
+                alert('Моля, изберете поне едно събитие.'); // Display alert
+            }
+
+        }
     </script>
 }
