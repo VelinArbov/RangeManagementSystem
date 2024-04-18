@@ -25,23 +25,23 @@ namespace RangeManagementSystem.Web.Controllers
             _userManager = userManager;
             _mapper = mapper;
         }
-        // GET: WeaponController
+        // GET: AmmonutionController
         public ActionResult Index(ReservationViewModel model)
         {
             return View(model);
         }
 
         // POST: WeaponController/Reserve
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Reserve(Dictionary<int, string> selectedProducts, DateTime startDate, DateTime endDate)
-        {
-            if (selectedProducts.Count > 0)
-            {
-                return RedirectToAction("Index", "Ammonution", new ReservationViewModel { Weapons = selectedProducts, StartDate = startDate, EndDate = endDate });
-            }
-            return Ok();
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Reserve(Dictionary<int, string> selectedProducts, DateTime startDate, DateTime endDate)
+        //{
+        //    if (selectedProducts.Count > 0)
+        //    {
+        //        return RedirectToAction("Index", "Ammonution", new ReservationViewModel { Weapons = selectedProducts, StartDate = startDate, EndDate = endDate });
+        //    }
+        //    return Ok();
+        //}
 
     }
 }

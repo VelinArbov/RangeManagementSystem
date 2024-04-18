@@ -1,0 +1,66 @@
+﻿@using RangeManagementSystem.Web.Models
+@model ShootingEventCreateViewModel
+@{
+}
+<h3 style="text-align:center; margin-bottom:20px">Организиране на нова стрелба</h3>
+@{
+    ViewBag.Title = "Организиране на нова стрелба";
+}
+<style>
+    .field-validation-error {
+        color:red;
+    }
+</style>
+
+@using (Html.BeginForm("Create", "ShootingEvent", FormMethod.Post))
+{
+    <div>
+        <div style="display: flex;  justify-content: space-between">
+            <div>
+                @Html.LabelFor(model => model.StartDate)
+                <div style="display: inline-grid;">
+                @Html.TextBoxFor(model => model.StartDate, new { type = "date" })
+                @Html.ValidationMessageFor(model => model.StartDate)
+                </div>
+            </div>
+
+            <div>
+                @Html.LabelFor(model => model.EndDate)
+                <div style="display: inline-grid;">
+                @Html.TextBoxFor(model => model.EndDate, new { type = "date" })
+                @Html.ValidationMessageFor(model => model.EndDate)
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex;  justify-content: space-between; margin-top:30px">
+            <div>
+                @Html.LabelFor(model => model.MinParticipants)
+                <div style="display: inline-grid;">        
+                @Html.TextBoxFor(model => model.MinParticipants, new { type = "number" })
+                @Html.ValidationMessageFor(model => model.MinParticipants)
+                </div>
+            </div>
+
+            <div>
+                @Html.LabelFor(model => model.MaxParticipants)
+                <div style="display: inline-grid;">
+                @Html.TextBoxFor(model => model.MaxParticipants, new { type = "number" })
+                @Html.ValidationMessageFor(model => model.MaxParticipants)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex;justify-content: center; margin-top: 50px;">
+        <!-- Бутон за организиране на стрелбата -->
+        <button type="submit">Организирай стрелбата</button>
+    </div>
+
+    <!-- Съобщение за успешно организиране на стрелбата -->
+    if (Model != null && !string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div style="display:flex; justify-content: center;margin-top:30px ">
+            <label id="txtResult">@Model.SuccessMessage</label>
+        </div>
+    }
+}

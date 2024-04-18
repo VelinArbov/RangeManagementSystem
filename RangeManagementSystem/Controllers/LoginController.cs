@@ -26,7 +26,7 @@ namespace RangeManagementSystem.Web.Controllers
             _userManager = userManager;
             _mapper = mapper;
         }
-  
+
         public IActionResult Index()
         {
             return View();
@@ -40,7 +40,7 @@ namespace RangeManagementSystem.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, lockoutOnFailure: true);
                 var user = await this._userManager.FindByNameAsync(model.Username);
                 if (result.Succeeded && user != null)
-                {                
+                {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     ViewData["UserId"] = userId;
                     if (user.IsAdmin)
@@ -49,14 +49,11 @@ namespace RangeManagementSystem.Web.Controllers
                     }
                     else
                     {
-                        //var dbWeapons = _dbContext.Weapons.ToList();
-                        //var weapons = _mapper.Map<List<WeaponViewModel>>(dbWeapons);
-                        //return RedirectToAction("Index", "Weapon", new { weaponsViewModel = weapons });
                         return RedirectToAction("Dashboard", "Client");
                     }
                 }
             }
-         
+
             return View("Index", model);
         }
 

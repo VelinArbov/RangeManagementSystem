@@ -1,0 +1,87 @@
+﻿@using RangeManagementSystem.Web.Models
+@model ShootingEventsViewModel
+@{
+}
+<h3 style="text-align:center; margin-bottom:20px">Организирани стрелби</h3>
+@{
+    ViewBag.Title = "Организирани стрелби";
+}
+
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: 71fr 729fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .list-box {
+        margin: 10px;
+        width: 700px;
+        grid-column: span 2;
+        align-self: start;
+    }
+
+    .button-container {
+        margin: 210px 0 10px 229px;
+        grid-column: 2;
+    }
+
+    .selected {
+        background-color: lightblue;
+    }
+
+    .unselected {
+        background-color: white;
+    }
+</style>
+<div style="display:flex;justify-content: center">
+    @using (Html.BeginForm("JoinEvents", "ShootingEvent", FormMethod.Post, new { id = "selectedProductsForm" }))
+    {
+        <div class="grid-container">
+            <!-- Списък с организирани стрелби -->
+            <div class="list-box">
+                <ul id="shootingEventsListBox" class="list-group" multiple="multiple">
+                    @foreach (var shootingEvent in Model.Events)
+                    {
+                        <li class="list-group-item shooting-event" data-id="@shootingEvent.Id">
+                            <div>                              
+                                <p>Организатор: @shootingEvent.OrganizerName</p>
+                                <p>Дата: от @shootingEvent.StartDate.ToShortDateString() до @shootingEvent.EndDate.ToShortDateString()</p>
+                                <p>Мин. участници: @shootingEvent.MinParticipants</p>
+                                <p>Макс. участници: @shootingEvent.MaxParticipants</p>
+                                <input type="hidden" name="selectedEventIds" id="selectedEventIds">
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- Бутон за включване в стрелбата -->
+            <div class="button-container">
+                <button type="button" class="btn btn-primary" onclick="submitSelectedEvents()">Включи се в стрелбата</button>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+          // Toggle selected class on click
+    document.querySelectorAll('.shooting-event').forEach(function(event) {
+        event.addEventListener('click', function() {
+            event.classList.toggle('selected');
+        });
+    });
+
+    // Function to submit selected events
+    function submitSelectedEvents() {
+        var selectedEventIds = [];
+        document.querySelectorAll('.shooting-event.selected').forEach(function(event) {
+            selectedEventIds.push(event.getAttribute('data-id'));
+        });
+        document.getElementById('selectedEventIds').value = selectedEventIds.join(',');
+        document.getElementById('selectedProductsForm').submit();
+    }
+    </script>
+}

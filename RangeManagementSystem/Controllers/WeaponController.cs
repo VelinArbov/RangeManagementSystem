@@ -19,7 +19,6 @@ namespace RangeManagementSystem.Web.Controllers
             UserManager<ApplicationUser> userManager,
             IMapper mapper)
         {
-
             _dbContext = dbContext;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -40,10 +39,9 @@ namespace RangeManagementSystem.Web.Controllers
         {
             if (selectedProducts.Count > 0)
             {
-                return RedirectToAction("Index", "Ammonution", new ReservationViewModel { Weapons = selectedProducts, StartDate = startDate, EndDate = endDate });
+                return RedirectToAction("Index", "Ammonution", routeValues: new ReservationViewModel { Weapons = selectedProducts, StartDate = startDate, EndDate = endDate });
             }
-            return Ok();
+            return NotFound();
         }
-
     }
 }

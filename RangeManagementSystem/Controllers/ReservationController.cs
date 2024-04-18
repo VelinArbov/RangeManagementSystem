@@ -32,23 +32,22 @@ namespace RangeManagementSystem.Web.Controllers
             return Ok();
         }
 
-
         private void CreateWeaponReservations(ReservationViewModel model)
         {
-            //var id = _userManager.GetUserId(User);
-            //foreach (var item in model.WeaponsId)
-            //{
-            //    var resr = new Reservation
-            //    {
-            //        WeaponId = item,
-            //        StartTime = model.StartDate,
-            //        EndTime = model.EndDate,
-            //        ApplicationUserId = Guid.Parse(id)
-            //    };
+            var id = _userManager.GetUserId(User);
+            foreach (var item in model.Weapons)
+            {
+                var resr = new Reservation
+                {
+                    WeaponId = item.Key,
+                    StartTime = model.StartDate,
+                    EndTime = model.EndDate,
+                    ApplicationUserId = id,
+                };
 
-            //    _dbContext.Reservations.Add(resr);
-            //}
-            //_dbContext.SaveChanges();
+                _dbContext.Reservations.Add(resr);
+            }
+            _dbContext.SaveChanges();
         }
     }
 }

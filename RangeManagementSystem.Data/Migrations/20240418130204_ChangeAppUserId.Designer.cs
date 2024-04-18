@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RangeManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using RangeManagementSystem.Data;
 namespace RangeManagementSystem.Data.Migrations
 {
     [DbContext(typeof(RangeManagementSystemDbContext))]
-    partial class RangeManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240418130204_ChangeAppUserId")]
+    partial class ChangeAppUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

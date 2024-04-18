@@ -18,12 +18,20 @@ namespace RangeManagementSystem.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ShootingEvent> ShootingEvents { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Reservation>()
-              .HasKey(x => new { x.AmmunitionId, x.WeaponId});
+              .HasKey(x => new { x.AmmunitionId, x.WeaponId });
 
+            //builder.Entity<ShootingEvent>()
+            //       .HasOne(e => e.ApplicationUser)
+            //       .WithMany() // Assuming ApplicationUser has no collection navigation property back to ShootingEvent
+            //       .HasForeignKey(e => e.ApplicationUserId);
 
             base.OnModelCreating(builder);
         }

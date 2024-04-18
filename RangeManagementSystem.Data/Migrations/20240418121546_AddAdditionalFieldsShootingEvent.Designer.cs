@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RangeManagementSystem.Data;
 
@@ -11,16 +12,15 @@ using RangeManagementSystem.Data;
 namespace RangeManagementSystem.Data.Migrations
 {
     [DbContext(typeof(RangeManagementSystemDbContext))]
-    partial class RangeManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240418121546_AddAdditionalFieldsShootingEvent")]
+    partial class AddAdditionalFieldsShootingEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.4")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -306,8 +306,10 @@ namespace RangeManagementSystem.Data.Migrations
                     b.Property<int>("WeaponId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -334,7 +336,7 @@ namespace RangeManagementSystem.Data.Migrations
 
                     b.HasKey("AmmunitionId", "WeaponId");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("ApplicationUserId1");
 
                     b.HasIndex("WeaponId");
 
@@ -349,8 +351,10 @@ namespace RangeManagementSystem.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -380,7 +384,7 @@ namespace RangeManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("ApplicationUserId1");
 
                     b.ToTable("ShootingEvents");
                 });
@@ -491,9 +495,7 @@ namespace RangeManagementSystem.Data.Migrations
 
                     b.HasOne("RangeManagementSystem.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Reservations")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId1");
 
                     b.HasOne("RangeManagementSystem.Data.Models.Weapon", "Weapon")
                         .WithMany()
@@ -512,9 +514,7 @@ namespace RangeManagementSystem.Data.Migrations
                 {
                     b.HasOne("RangeManagementSystem.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("ShootingEvents")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId1");
 
                     b.Navigation("ApplicationUser");
                 });
