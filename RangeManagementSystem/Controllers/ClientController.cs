@@ -5,14 +5,15 @@ namespace RangeManagementSystem.Web.Controllers
 {
     public class ClientController : Controller
     {
+
         // GET: ClientController
         public ActionResult Dashboard()
         {
             return View();
         }
 
-        // GET: ClientController/Details/5
-        public ActionResult Details(int id)
+        // GET: ClientController/
+        public ActionResult Index()
         {
             return View();
         }

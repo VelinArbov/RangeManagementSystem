@@ -48,8 +48,11 @@ namespace RangeManagementSystem.Web.Controllers
                         return View("/Views/Admin/Index.cshtml", new WeaponsViewModel());
                     }
                     else
-                    { 
-                        return View("/Views/Client/Dashboard.cshtml");
+                    {
+                        //var dbWeapons = _dbContext.Weapons.ToList();
+                        //var weapons = _mapper.Map<List<WeaponViewModel>>(dbWeapons);
+                        //return RedirectToAction("Index", "Weapon", new { weaponsViewModel = weapons });
+                        return RedirectToAction("Dashboard", "Client");
                     }
                 }
             }

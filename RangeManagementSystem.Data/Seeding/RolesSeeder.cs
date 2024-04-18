@@ -1,32 +1,46 @@
-﻿namespace RangeManagementSystem.Data
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using RangeManagementSystem.Data.Models;
+
+namespace RangeManagementSystem.Data
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.Extensions.DependencyInjection;
-    using RangeManagementSystem.Data.Models;
-
-    internal class RolesSeeder : ISeeder
+    internal class UsersSeeder : ISeeder
     {
         public async Task SeedAsync(RangeManagementSystemDbContext dbContext, IServiceProvider serviceProvider)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
-            await SeedRoleAsync(roleManager, "Client");
-        }
-
-        private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)
-        {
-            var role = await roleManager.FindByNameAsync(roleName);
-            if (role == null)
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            if (!userManager.Users.ToList().Any())
             {
-                var result = await roleManager.CreateAsync(new ApplicationRole(roleName));
-                if (!result.Succeeded)
+                // Check if the administrator user exists
+                var adminUser = await userManager.FindByEmailAsync("admin@example.com");
+                if (adminUser == null)
                 {
-                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+                    // Create the administrator user
+                    adminUser = new ApplicationUser
+                    {
+                        UserName = "Admin",
+                        Email = "admin@example.com",
+                        IsAdmin = true,
+                        // You can add additional properties here
+                    };
+                    var result = await userManager.CreateAsync(adminUser, "AdminPassword123!"); // Change the password
+                    if (!result.Succeeded)
+                    {
+                        throw new Exception($"Failed to create administrator user: {result.Errors}");
+                    }
                 }
+                var simpleUser = new ApplicationUser
+                {
+                    UserName = "User",
+                    Email = "user@example.com",
+                    IsAdmin = false
+                };
+                var newUser = await userManager.CreateAsync(simpleUser, "AdminPassword1234!"); // Change the password
+                if (!newUser.Succeeded)
+                {
+                    throw new Exception($"Failed to create administrator user: {newUser.Errors}");
+                }
+                // You can seed other users similarly if needed
             }
         }
     }

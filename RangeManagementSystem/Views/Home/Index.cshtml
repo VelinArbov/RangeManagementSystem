@@ -19,6 +19,9 @@
     <p class="welcome-title" style="margin-top:10px">
         @this.User.Identity.Name
     </p>
+    <div class="button-container" style="display: grid; justify-content: center; margin-top: 100px">
+        <button onclick="location.href='@Url.Action("Index", "Weapon")'" style="margin:5px; width:300px; height:40px;">Наемане на оръжие и резервация</button>
+    </div>
 }
 else
 {

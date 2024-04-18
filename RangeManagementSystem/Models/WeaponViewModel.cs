@@ -2,6 +2,7 @@
 {
     public class WeaponViewModel
     {
+        public int Id { get; set; }
         public required string Type { get; set; }
         public required string Caliber { get; set; }
         public required int Quantity { get; set; }

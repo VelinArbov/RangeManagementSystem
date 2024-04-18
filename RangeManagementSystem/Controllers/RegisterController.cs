@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using RangeManagementSystem.Data;
 using RangeManagementSystem.Data.Models;
 using RangeManagementSystem.Web.Models;
-using RangeManagementSystem.Web.Services.Register;
 
 namespace RangeManagementSystem.Web.Controllers
 {
@@ -24,13 +22,11 @@ namespace RangeManagementSystem.Web.Controllers
             _userManager = userManager;
         }
 
-
         // GET: RegisterController
         public ActionResult Index()
         {
             return View();
         }
-
 
         [HttpPost]
         public async Task<ActionResult> Register(RegisterInputViewModel model)

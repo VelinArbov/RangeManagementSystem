@@ -2,36 +2,37 @@
 
 namespace RangeManagementSystem.Data
 {
-    internal class WeaponsSeeder : ISeeder
+    internal class AmmoSeeder : ISeeder
     {
         public async Task SeedAsync(RangeManagementSystemDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (dbContext.Weapons.Any())
+            if (dbContext.Ammunitions.Any())
             {
                 return;
             }
 
-            await dbContext.Weapons.AddRangeAsync(WeaponGenerator());
+            await dbContext.Ammunitions.AddRangeAsync(AmmoGenerator());
 
         }
 
-        private List<Weapon> WeaponGenerator()
+        private List<Ammunition> AmmoGenerator()
         {
-            var weapons = new List<Weapon>();
+            var ammo = new List<Ammunition>();
             var random = new Random();
             var types = new[] { "FMJ", "JHP", "AP", "Tracer", "Shotgun", "Rifle", "Pistol" };
-            var calibers = new[] { "9mm", "5.56mm", "7.62mm", ".45 ACP", ".308", ".50 BMG", "12 gauge" };
+            var calibers = new[] { "25", "9mm", "5.56mm", "12 Gauge" };
 
             for (int i = 0; i < 10; i++)
             {
-                weapons.Add(new Weapon
+                ammo.Add(new Ammunition
                 {
                     Type = types[random.Next(types.Length)],
                     Caliber = calibers[random.Next(calibers.Length)],
                     Quantity = random.Next(1, 10),
                     Availability = random.Next(2) == 0
                 });
-            } return weapons;
+            } 
+            return ammo;
         }
     }
 }

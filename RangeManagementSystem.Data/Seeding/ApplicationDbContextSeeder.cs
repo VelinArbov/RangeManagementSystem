@@ -28,6 +28,8 @@
                               new UserRolesSeeder(),
                               new RolesSeeder(),
                               new WeaponsSeeder(),
+                              new AmmoSeeder(),
+                              new UsersSeeder()
                           };
 
             foreach (var seeder in seeders)

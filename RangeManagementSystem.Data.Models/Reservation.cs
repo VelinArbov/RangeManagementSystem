@@ -12,9 +12,9 @@ namespace RangeManagementSystem.Data.Models
         public Guid ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get;set;}
         public int WeaponId { get; set; }
-        public virtual Weapon Weapons { get; set; }
+        public virtual Weapon Weapon { get; set; }
         public int AmmunitionId { get; set; }
-        public virtual Ammunition Ammunitions { get; set; }
+        public virtual Ammunition Ammunition { get; set; }
 
     }
 }

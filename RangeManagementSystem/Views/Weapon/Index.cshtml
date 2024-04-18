@@ -1,0 +1,84 @@
+﻿@using RangeManagementSystem.Web.Models
+@model WeaponsViewModel
+
+@{
+    var selectedProductsAndGunTypes = new Dictionary<int, string>();
+}
+}
+<style>
+    /* Style for selected rows */
+    .selected {
+        background-color: #cce5ff; /* Light blue background */
+    }
+
+    .disabled {
+        opacity: 0.5; /* Reduce opacity to visually indicate disabled state */
+        pointer-events: none; /* Disable pointer events to prevent interaction */
+    }
+</style>
+@using (Html.BeginForm("Reserve", "Weapon", FormMethod.Post, new { id = "selectedProductsForm" }))
+{
+    <table class="table" id="weaponsTable">
+        <thead>
+            <tr>
+                <th>Калибър</th>
+                <th>Tип</th>
+                <th>Брой</th>
+                <th>Свободен</th>
+                <th></th> <!-- Add a new header for checkboxes -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Weapons)
+            {
+                <tr class="@(item.Availability ? "" : "disabled")">
+                    <td>@item.Caliber</td>
+                    <td>@item.Type</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Availability ? "Да" : "Не")</td>
+                    <td>
+                        <input type="checkbox" name="selectedProducts[@item.Id]" value="@item.Type" data-id="@item.Id" class="product-checkbox" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div style="display:flex;justify-content: space-between;">
+        <div>
+            <label>Начална дата:</label>
+            <input type="date" name="startDate" />
+        </div>
+
+        <button type="submit" id="submitBtn">Наеми избраните оръжия</button>
+
+        <div>
+            <label>Kрайна дата:</label>
+            <input type="date" name="endDate" />
+        </div>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var submitBtn = document.getElementById('submitBtn');
+
+        // Event listener for form submission
+        submitBtn.addEventListener('click', function (e) {
+            var selectedWeapons = document.querySelectorAll('input[type="checkbox"]:checked')
+            if (selectedWeapons.length === 0) {
+                event.preventDefault(); // Prevent form submission
+                alert('Моля, изберете поне едно оръжие.'); // Display alert
+            }
+            else {
+                e.preventDefault();
+                sendSelectedProducts();
+            }
+        });
+
+        // Function to gather selected product IDs and submit the form
+        function sendSelectedProducts() {
+            var form = document.getElementById('selectedProductsForm');
+            form.submit();
+        }
+    });
+</script>
