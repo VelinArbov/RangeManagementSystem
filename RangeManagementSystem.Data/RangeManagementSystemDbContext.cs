@@ -25,8 +25,13 @@ namespace RangeManagementSystem.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             builder.Entity<Reservation>()
-              .HasKey(x => new { x.AmmunitionId, x.WeaponId });
+    .           HasKey(x => x.Id);
+
+            builder.Entity<Reservation>()
+                .Property(x => x.Id)
+                .ValueGeneratedOnAdd();
 
             //builder.Entity<ShootingEvent>()
             //       .HasOne(e => e.ApplicationUser)

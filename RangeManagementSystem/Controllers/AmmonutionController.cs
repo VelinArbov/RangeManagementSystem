@@ -29,18 +29,15 @@ namespace RangeManagementSystem.Web.Controllers
         public ActionResult Index(DateTime startDate, DateTime endDate, Dictionary<int, string> Weapons)
         {
             var weaponTypes = Weapons.Values;
-            var ammoForSelectedWeapons = _dbContext.Ammunitions.Where(x => weaponTypes.Contains(x.Type)).ToList();
-            var mappedAmmo = _mapper.Map<List<AmmunitionViewModel>>(ammoForSelectedWeapons);
-            foreach (var ammo in mappedAmmo)
-            {              
-                if (Weapons.Values.Contains(ammo.Type))
-                {
-                    ammo.WeaponId = Weapons.FirstOrDefault(x => x.Value == ammo.Type).Key;
-                }
-            }
-
+            // Return only relevant ammo
+            var ammo = _dbContext.Ammunitions.Where(x=> Weapons.Values.Contains(x.Type));
+            var mappedAmmo = _mapper.Map<List<AmmunitionViewModel>>(ammo);
+            mappedAmmo.ForEach(x =>
+            {
+                x.WeaponId = Weapons.Where(t => t.Value == x.Type).FirstOrDefault().Key;
+            });
             var model = new ReservationViewModel
-            {            
+            {
                 Weapons = Weapons,
                 StartDate = startDate,
                 EndDate = endDate,
@@ -49,8 +46,8 @@ namespace RangeManagementSystem.Web.Controllers
             return View(model);
         }
 
-       [HttpPost]
-       [ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Reserve(Dictionary<int, string> selectedProducts, DateTime startDate, DateTime endDate)
         {
             if (selectedProducts.Count > 0)
@@ -60,12 +57,13 @@ namespace RangeManagementSystem.Web.Controllers
                 {
                     var resr = new Reservation
                     {
-                        WeaponId = item.Key,
+                        ReservationDate = DateTime.UtcNow,
+                        AmmunitionId = item.Key,
                         StartTime = startDate,
                         EndTime = endDate,
                         Description = "Lorem ipsun",
                         ApplicationUserId = id,
-                        AmmunitionId = int.Parse(item.Value)
+                        WeaponId = int.Parse(item.Value)
                     };
 
                     _dbContext.Reservations.Add(resr);

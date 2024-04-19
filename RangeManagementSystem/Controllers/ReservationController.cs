@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RangeManagementSystem.Data.Models;
 using RangeManagementSystem.Data;
 using RangeManagementSystem.Web.Models;
+using Microsoft.Extensions.Logging;
 
 namespace RangeManagementSystem.Web.Controllers
 {
@@ -48,6 +49,14 @@ namespace RangeManagementSystem.Web.Controllers
                 _dbContext.Reservations.Add(resr);
             }
             _dbContext.SaveChanges();
+        }
+
+        public ActionResult MyReservation(string id)
+        {
+            var reserv = _dbContext.Reservations.Where(x => x.ApplicationUserId == id).ToList();
+            var mapped = _mapper.Map<List<ReservationDataViewModel>>(reserv);
+            var model = new ReservationListViewModel { Reservations = mapped };
+            return View(model);    
         }
     }
 }

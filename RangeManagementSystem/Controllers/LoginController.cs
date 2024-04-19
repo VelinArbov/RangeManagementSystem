@@ -5,6 +5,7 @@ using RangeManagementSystem.Data;
 using RangeManagementSystem.Web.Models;
 using AutoMapper;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RangeManagementSystem.Web.Controllers
 {
@@ -19,7 +20,6 @@ namespace RangeManagementSystem.Web.Controllers
             UserManager<ApplicationUser> userManager,
             IMapper mapper)
         {
-
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
@@ -43,7 +43,7 @@ namespace RangeManagementSystem.Web.Controllers
                     ViewData["UserId"] = userId;
                     if (user.IsAdmin)
                     {
-                        return View("/Views/Admin/Index.cshtml", new WeaponsViewModel());
+                        return RedirectToAction("Dashboard", "Admin");  
                     }
                     else
                     {
@@ -55,12 +55,11 @@ namespace RangeManagementSystem.Web.Controllers
             return View("Index", model);
         }
 
+        [Authorize]
         public async Task<IActionResult> Logout(string userId)
         {
-
             // Sign out the user
             await _signInManager.SignOutAsync();
-
             return RedirectToAction("Index", "Home"); // Redirect to a specific page after sign out
         }
     }

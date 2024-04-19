@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using RangeManagementSystem.Data.Models
+@using System.Security.Claims
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
@@ -30,7 +31,7 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
-                    </button>              
+                    </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item dropdown">
@@ -41,15 +42,15 @@
                                     <a class="dropdown-item" href="@Url.Action("Index", "ShootingEvent")">Нова стрелба</a>
                                     <a class="dropdown-item" href="@Url.Action("Index", "Weapon")">Запази оръжие</a>
                                     <a class="dropdown-item" href="@Url.Action("Events", "ShootingEvent")">Включи се в стрелба</a>
-                                    <a class="dropdown-item" href="@Url.Action("Dashboard", "Client")">Табло</a>
-                                    <div class="dropdown-divider"></div>                                 
+                                    <a class="dropdown-item" href="@Url.Action("Dashboard", @User.IsInRole("Admin") ? "Admin": "Client")">Табло</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="" asp-controller="Login" asp-route-userId="@userId" asp-action="SignOutUser">Изход</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Моят профил</a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Наети оръжия</a>
+                                    <a class="dropdown-item" href="@Url.Action("MyReservation", "Reservation",new { id = (User.Identity as System.Security.Claims.ClaimsIdentity)?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value })">Наети оръжия</a>
                                     <a class="dropdown-item" href="@Url.Action("FutureEvents", "ShootingEvent")">Предстоящи стрелби</a>
                                     <a class="dropdown-item" href="@Url.Action("PastEvents", "ShootingEvent")">Минали стрелби</a>
                                 </div>
@@ -58,6 +59,11 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-route-userId="@userId" asp-action="Logout">Изход</a>
                             </li>
                         </ul>
+                        <div class="ml-auto" style="display:contents">
+                            <span>Добре дошъл:</span>
+                            <span class="nav-link" style="color:blue">  @this.User.Identity.Name</span>
+                        </div>
+
                     </div>
                 </div>
             </nav>

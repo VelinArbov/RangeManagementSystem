@@ -300,10 +300,13 @@ namespace RangeManagementSystem.Data.Migrations
 
             modelBuilder.Entity("RangeManagementSystem.Data.Models.Reservation", b =>
                 {
-                    b.Property<int>("AmmunitionId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("WeaponId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AmmunitionId")
                         .HasColumnType("int");
 
                     b.Property<string>("ApplicationUserId")
@@ -320,9 +323,6 @@ namespace RangeManagementSystem.Data.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -332,7 +332,12 @@ namespace RangeManagementSystem.Data.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("AmmunitionId", "WeaponId");
+                    b.Property<int>("WeaponId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AmmunitionId");
 
                     b.HasIndex("ApplicationUserId");
 

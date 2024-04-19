@@ -12,8 +12,8 @@ using RangeManagementSystem.Data;
 namespace RangeManagementSystem.Data.Migrations
 {
     [DbContext(typeof(RangeManagementSystemDbContext))]
-    [Migration("20240416113537_Initial-AdminProp")]
-    partial class InitialAdminProp
+    [Migration("20240419112755_Final")]
+    partial class Final
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,9 @@ namespace RangeManagementSystem.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -300,16 +303,17 @@ namespace RangeManagementSystem.Data.Migrations
 
             modelBuilder.Entity("RangeManagementSystem.Data.Models.Reservation", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("AmmunitionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WeaponId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId1")
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -322,9 +326,6 @@ namespace RangeManagementSystem.Data.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -334,9 +335,14 @@ namespace RangeManagementSystem.Data.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("AmmunitionId", "WeaponId");
+                    b.Property<int>("WeaponId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ApplicationUserId1");
+                    b.HasKey("Id");
+
+                    b.HasIndex("AmmunitionId");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("WeaponId");
 
@@ -351,10 +357,8 @@ namespace RangeManagementSystem.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId1")
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -370,6 +374,12 @@ namespace RangeManagementSystem.Data.Migrations
                     b.Property<DateTime>("EventDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("MaxParticipants")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinParticipants")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -378,7 +388,7 @@ namespace RangeManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId1");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("ShootingEvents");
                 });
@@ -481,7 +491,7 @@ namespace RangeManagementSystem.Data.Migrations
 
             modelBuilder.Entity("RangeManagementSystem.Data.Models.Reservation", b =>
                 {
-                    b.HasOne("RangeManagementSystem.Data.Models.Ammunition", "Ammunitions")
+                    b.HasOne("RangeManagementSystem.Data.Models.Ammunition", "Ammunition")
                         .WithMany()
                         .HasForeignKey("AmmunitionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -489,26 +499,30 @@ namespace RangeManagementSystem.Data.Migrations
 
                     b.HasOne("RangeManagementSystem.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Reservations")
-                        .HasForeignKey("ApplicationUserId1");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("RangeManagementSystem.Data.Models.Weapon", "Weapons")
+                    b.HasOne("RangeManagementSystem.Data.Models.Weapon", "Weapon")
                         .WithMany()
                         .HasForeignKey("WeaponId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ammunitions");
+                    b.Navigation("Ammunition");
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("Weapons");
+                    b.Navigation("Weapon");
                 });
 
             modelBuilder.Entity("RangeManagementSystem.Data.Models.ShootingEvent", b =>
                 {
                     b.HasOne("RangeManagementSystem.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("ShootingEvents")
-                        .HasForeignKey("ApplicationUserId1");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });

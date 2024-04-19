@@ -1,0 +1,44 @@
+﻿@using RangeManagementSystem.Web.Models
+@model WeaponEditViewModel
+@{
+}
+<h3 style="text-align:center; margin-bottom:20px">Промени оръжие</h3>
+@{
+    ViewBag.Title = "Промени оръжие";
+}
+<style>
+    .half-width {
+        width: 50%;
+    }
+</style>
+
+<div style="display:flex; justify-content: center;margin-top:50px">
+    <div style="min-width: 400px">
+        @using (Html.BeginForm("EditAction", "Weapon", FormMethod.Post))
+        {
+            <div style="margin-bottom: 10px; display:flex">
+                @Html.LabelFor(m => m.Type, new { @class = "half-width" })
+                @Html.TextBoxFor(m => m.Type, new { @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Type)
+                @Html.Hidden("Id", Model.Id)
+            </div>
+            <div style="display:flex;margin-bottom: 10px;">
+                @Html.LabelFor(m => m.Caliber, new { @class = "half-width" })
+                @Html.TextBoxFor(m => m.Caliber, new { @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Caliber)
+            </div>
+            <div style="display:flex;margin-bottom: 10px;">
+                @Html.LabelFor(m => m.Quantity, new { @class = "half-width" })
+                @Html.TextBoxFor(m => m.Quantity, new { type = "number", @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Quantity)
+            </div>
+            <div style="display:flex;margin-bottom: 10px;">
+                @Html.LabelFor(m => m.Availability, new { @class = "half-width" })
+                @Html.CheckBoxFor(m => m.Availability, new { @class = "half-width" })
+            </div>
+            <div style="display:flex; justify-content: center">
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px; text-align: center;">Промени</button>
+            </div>
+        }
+    </div>
+</div>

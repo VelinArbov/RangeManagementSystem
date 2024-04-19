@@ -1,0 +1,39 @@
+﻿@using RangeManagementSystem.Web.Models
+@model WeaponCreateViewModel
+@{
+}
+<h3 style="text-align:center; margin-bottom:20px">Добави оръжие</h3>
+@{
+    ViewBag.Title = "Добави оръжие";
+}
+<style>
+    .half-width {
+        width: 50%;
+    }
+</style>
+
+<div style="display:flex; justify-content: center;margin-top:50px">
+    <div style="min-width: 400px">
+        @using (Html.BeginForm("Create", "Weapon", FormMethod.Post))
+        {
+            <div style="margin-bottom: 10px; display:flex">
+                @Html.LabelFor(m => m.Type, new { @class = "half-width" })
+                @Html.TextBoxFor(m => m.Type, new { @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Type)
+            </div>
+            <div style="display:flex;margin-bottom: 10px;">
+                @Html.LabelFor(m => m.Caliber, new { @class = "half-width" })
+                @Html.TextBoxFor(m => m.Caliber, new { @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Caliber)
+            </div>
+            <div style="display:flex;margin-bottom: 10px;">
+                @Html.LabelFor(m => m.Quantity, new { @class = "half-width" })
+                @Html.TextBoxFor(m => m.Quantity, new { type = "number", @class = "half-width" })
+                @Html.ValidationMessageFor(m => m.Quantity)
+            </div>    
+            <div style="display:flex; justify-content: center">
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px; text-align: center;">Създай</button>
+            </div>
+        }
+    </div>
+</div>

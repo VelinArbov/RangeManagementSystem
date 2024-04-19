@@ -29,7 +29,7 @@
             <ul id="shootingEventsListBox" class="list-group" multiple="multiple">
                 @foreach (var shootingEvent in Model.Events)
                 {
-                    <li class="list-group-item shooting-event" data-id="@shootingEvent.Id">
+                    <li class="list-group-item shooting-event" style="background-color: indianred" data-id="@shootingEvent.Id">
                         <div>
                             <p>Организатор: @shootingEvent.OrganizerName</p>
                             <p>Дата: от @shootingEvent.StartDate.ToShortDateString() до @shootingEvent.EndDate.ToShortDateString()</p>

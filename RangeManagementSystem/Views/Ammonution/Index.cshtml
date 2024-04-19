@@ -1,7 +1,7 @@
 ﻿@using RangeManagementSystem.Web.Models
 @model ReservationViewModel
 @{
-    ViewBag.Title = "Добавяне на амуниций";
+    ViewBag.Title = "Добавяне на боеприпаси";
     var selectedProductsAndAmmoTypes = new Dictionary<int, string>();
 
 }
@@ -17,9 +17,8 @@
     }
 </style>
 
-<input type="date" hidden name="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
-<input type="date" hidden name="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
-<h3 style="text-align:center; margin-bottom: 30px;"> Добавяне на амуниции</h3>
+
+<h3 style="text-align:center; margin-bottom: 30px;"> Добавяне на боеприпраси</h3>
 @if (Model.Ammunitions.Any())
 {
     @using (Html.BeginForm("Reserve", "Ammonution", FormMethod.Post, new { id = "selectedProductsForm" }))
@@ -49,15 +48,27 @@
                 }
             </tbody>
         </table>
-        <div style="display:flex;justify-content: center;">
-            <button type="submit" id="submitBtn">Добави амуниций</button>
-        </div>    
+        @*    <div style="display:flex;justify-content: center;">
+            <button type="submit" id="submitBtn">Добави на боеприпаси</button>
+        </div> *@
+        <div style="display:flex;justify-content: space-between;">
+            <div>
+                <label>Начална дата:</label>
+                <input type="date" name="startDate" />
+            </div>
+            <button type="submit" class="btn btn-success" id="submitBtn">Завърши резервацията</button>
+
+            <div>
+                <label>Kрайна дата:</label>
+                <input type="date" name="endDate" />
+            </div>
+        </div>
     }
 }
 else
 {
     <div style="display:flex; justify-content: center;margin-top:30px ">
-        <h1 id="txtResult">Няма подходящи амуницй</h1>
+        <h1 id="txtResult">Няма подходящи боеприпаси</h1>
     </div>
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -68,9 +79,19 @@ else
         // Event listener for form submission
         submitBtn.addEventListener('click', function (e) {
             var selectedWeapons = document.querySelectorAll('input[type="checkbox"]:checked')
+            var startDateInput = document.querySelector('input[name="startDate"]')
+            var endDateInput = document.querySelector('input[name="endDate"]')
             if (selectedWeapons.length === 0) {
                 event.preventDefault(); // Prevent form submission
-                alert('Моля, изберете поне едни амуницй.'); // Display alert
+                alert('Моля, изберете поне едни боеприпаси.'); // Display alert
+            }
+            if (startDateInput.value === '') {
+                event.preventDefault(); // Prevent form submission
+                alert('Моля, въведете начална дата.'); // Display alert
+            }
+            if (endDateInput.value === '') {
+                event.preventDefault(); // Prevent form submission
+                alert('Моля, въведете крайна дата.'); // Display alert
             }
             else {
                 e.preventDefault();

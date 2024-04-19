@@ -4,7 +4,7 @@
 @{
     var selectedProductsAndGunTypes = new Dictionary<int, string>();
 }
-}
+
 <style>
     /* Style for selected rows */
     .selected {
@@ -16,6 +16,7 @@
         pointer-events: none; /* Disable pointer events to prevent interaction */
     }
 </style>
+<h3 style="text-align:center; margin-bottom:20px">Избери оръжие</h3>
 @using (Html.BeginForm("Reserve", "Weapon", FormMethod.Post, new { id = "selectedProductsForm" }))
 {
     <table class="table" id="weaponsTable">
@@ -31,11 +32,11 @@
         <tbody>
             @foreach (var item in Model.Weapons)
             {
-                <tr class="@(item.Availability ? "" : "disabled")">
+                <tr class="@(@item.Quantity > 0 ? "" : "disabled")">
                     <td>@item.Caliber</td>
                     <td>@item.Type</td>
                     <td>@item.Quantity</td>
-                    <td>@(item.Availability ? "Да" : "Не")</td>
+                    <td>@(@item.Quantity > 0 ? "Да" : "Не")</td>
                     <td>
                         <input type="checkbox" name="selectedProducts[@item.Id]" value="@item.Type" data-id="@item.Id" class="product-checkbox" />
                     </td>
@@ -43,18 +44,9 @@
             }
         </tbody>
     </table>
-    <div style="display:flex;justify-content: space-between;">
-        <div>
-            <label>Начална дата:</label>
-            <input type="date" name="startDate" />
-        </div>
+    <div style="display:flex;justify-content: center; margin-top:20px;">
 
-        <button type="submit" id="submitBtn">Наеми избраните оръжия</button>
-
-        <div>
-            <label>Kрайна дата:</label>
-            <input type="date" name="endDate" />
-        </div>
+        <button class="btn btn-success" type="submit" id="submitBtn">Наеми избраните оръжия</button>
     </div>
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
