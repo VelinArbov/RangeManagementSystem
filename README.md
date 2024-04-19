@@ -48,4 +48,4 @@ Contributors
 John Doe
 Jane Smith
 Support
-For any issues or inquiries, please contact support@example.com.
+For any issues or inquiries, please contact arbov.v@gmail.com.
