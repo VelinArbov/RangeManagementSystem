@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RangeManagementSystem.Data;
@@ -18,6 +17,14 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
        .AddDefaultTokenProviders();
 
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This lambda determines whether user consent for non-essential 
+    // cookies is needed for a given request.
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+    options.ConsentCookieValue = "true";
+});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -53,6 +60,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseCookiePolicy();
 
 app.UseRouting();
 

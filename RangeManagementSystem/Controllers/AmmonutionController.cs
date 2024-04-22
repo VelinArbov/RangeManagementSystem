@@ -46,6 +46,13 @@ namespace RangeManagementSystem.Web.Controllers
             return View(model);
         }
 
+        public ActionResult AdminDashboard()
+        {
+            var dbWeapons = _dbContext.Ammunitions.ToList();
+            var ammo = _mapper.Map<List<AmmunitionViewModel>>(dbWeapons);
+            return View(new AmmunitionsViewModel { Ammunitions = ammo });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Reserve(Dictionary<int, string> selectedProducts, DateTime startDate, DateTime endDate)

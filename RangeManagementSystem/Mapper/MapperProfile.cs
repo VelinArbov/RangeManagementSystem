@@ -25,10 +25,13 @@ namespace RangeManagementSystem.Web.Mapper
                 y.MapFrom(s => s.Weapon.Type))
                  .ForMember(x => x.AmmoType, y =>
                 y.MapFrom(s => s.Ammunition.Type))
+                .ForMember(x => x.UserName, y =>
+                y.MapFrom(s => s.ApplicationUser.UserName))
                  .ForMember(x => x.WeaponCaliber, y =>
                 y.MapFrom(s => s.Weapon.Caliber))
                  .ForMember(x => x.AmmoCaliber, y =>
                 y.MapFrom(s => s.Ammunition.Caliber));
+
         }
     }
 }

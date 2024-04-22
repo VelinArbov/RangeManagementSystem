@@ -65,8 +65,20 @@ namespace RangeManagementSystem.Web.Controllers
         public ActionResult AdminDashboard()
         {
             var dbWeapons = _dbContext.Weapons.ToList();
-            var weapons = _mapper.Map<List<WeaponViewModel>>(dbWeapons);
+            var mappedWeapons = _mapper.Map<List<WeaponViewModel>>(dbWeapons);
+            var reservedWeapons = _dbContext.Reservations.ToList();
+            var weapons = SetQuantity(mappedWeapons, reservedWeapons);
             return View(new WeaponsViewModel { Weapons = weapons });
+        }
+
+        private List<WeaponViewModel> SetQuantity(List<WeaponViewModel> mappedWeapons, List<Reservation> reservedWeapons)
+        {
+            for (int i = 0; i < mappedWeapons.Count; i++)
+            {
+                var count = reservedWeapons.Where(x => x.WeaponId == mappedWeapons[i].Id).Count();
+                mappedWeapons[i].RentedWeapons = count;
+            }
+            return mappedWeapons;
         }
 
         [Authorize(Roles = "Admin")]

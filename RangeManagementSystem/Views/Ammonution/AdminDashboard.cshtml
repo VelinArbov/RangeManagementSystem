@@ -1,5 +1,5 @@
 ﻿@using RangeManagementSystem.Web.Models
-@model WeaponsViewModel
+@model AmmunitionsViewModel
 
 @{
     var selectedProductsAndGunTypes = new Dictionary<int, string>();
@@ -17,34 +17,32 @@
     }
 </style>
 <div style="display:flex;justify-content: space-between; flex-wrap: nowrap">
-    <h3 style="text-align:center; margin-bottom:20px">Oръжия</h3>
+    <h3 style="text-align:center; margin-bottom:20px">Боеприпаси</h3>
     <a href="@Url.Action("Create")">
-        <button class="btn btn-success ">Добави ново оръжие</button>
+        <button class="btn btn-success ">Добави нови боеприпаси</button>
     </a>
 </div>
-@using (Html.BeginForm("Edit", "Weapon", FormMethod.Post, new { id = "selectedProductsForm" }))
+@using (Html.BeginForm("Edit", "Ammonution", FormMethod.Post, new { id = "selectedProductsForm" }))
 {
     @Html.AntiForgeryToken()
     <table class="table" id="weaponsTable">
         <thead>
             <tr>
-                <th>Tип</th>
                 <th>Калибър</th>
-                <th>Общо</th>
-                <th>Нaeти</th>
-                <th>Свободни</th>
+                <th>Tип</th>
+                <th>Брой</th>
+                <th>Свободен</th>
                 <th></th> <!-- Add a new header for checkboxes -->
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Weapons)
+            @foreach (var item in Model.Ammunitions)
             {
                 <tr>
-                    <td>@item.Type</td>
                     <td>@item.Caliber</td>
+                    <td>@item.Type</td>
                     <td>@item.Quantity</td>
-                    <td>@item.RentedWeapons</td>
-                    <td>@item.FreeWeapons</td>
+                    <td>@(item.Availability ? "Да" : "Не")</td>
                     <td>
                         <input type="checkbox" name="selectedProducts[@item.Id]" value="@item.Type" data-id="@item.Id" class="product-checkbox" />
                     </td>
@@ -56,21 +54,9 @@
         </tbody>
     </table>
     <div style="display:flex;justify-content: space-around;">
-        <button class="btn btn-primary" type="submit" id="editBtn">Промени избраното оръжие</button>
+        <button class="btn btn-primary" type="submit" id="editBtn">Промени избраните боеприпаси</button>
     </div>
 }
-
-<div style="display:flex;justify-content: space-between;">
-    <a href="@Url.Action("List", "Reservation")">
-        <button class="btn btn-warning ">Клиенти с наети оръжия </button>
-    </a>
-    <a href="@Url.Action("ListReturned", "Reservation")">
-        <button class="btn btn-warning ">Последно върнати оръжия </button>
-    </a>
-    <a href="@Url.Action("ListRented", "Reservation")">
-        <button class="btn btn-warning ">Последно наети оръжия </button>
-    </a>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -98,7 +84,7 @@
 
     $(document).ready(function () {
         $('.delete-button').on('click', function () {
-            if (confirm("Сигурни ли сте че иcкате да изтриете това оръжие?")) {
+            if (confirm("Сигурни ли сте че иcкате да изтриете тези боеприпаси?")) {
                 var itemId = $(this).data('id');
                 $(this).closest('tr').remove();
                 $.ajax({

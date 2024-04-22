@@ -10,5 +10,6 @@
         public string WeaponCaliber { get; set; }
         public string AmmoType{ get; set; }
         public string AmmoCaliber{ get; set; }
+        public string UserName { get; set; }
     }
 }

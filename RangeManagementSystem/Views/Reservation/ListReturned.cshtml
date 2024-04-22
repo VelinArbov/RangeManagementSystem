@@ -1,0 +1,59 @@
+﻿@using RangeManagementSystem.Web.Models
+@model ReservationListViewModel
+
+<h3 style="text-align:center; margin-bottom:20px">Резервации</h3>
+@{
+    ViewBag.Title = "Резервации";
+}
+
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: 71fr 729fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .list-box {
+        margin: 10px;
+        width: 700px;
+        grid-column: span 2;
+        align-self: start;
+    }
+
+    .button-container {
+        margin: 210px 0 10px 229px;
+        grid-column: 2;
+    }
+
+    .selected {
+        background-color: lightblue;
+    }
+
+    .unselected {
+        background-color: white;
+    }
+</style>
+<div style="display:flex;justify-content: center">
+    <div class="grid-container">
+        <!-- Списък с организирани стрелби -->
+        <div class="list-box">
+            <ul id="shootingEventsListBox" class="list-group" multiple="multiple">
+                @foreach (var weapon in Model.Reservations)
+                {
+                    <li class="list-group-item shooting-event">
+                        <div>
+                            <p>Клиент: @weapon.UserName</p>
+                            <p>Вид: @weapon.WeaponType</p>
+                            <p>Калибър: @weapon.WeaponCaliber</p>
+                            <p>Дата: от @weapon.StartTime.ToShortDateString() до @weapon.EndTime.ToShortDateString()</p>
+                            <p>Боеприпаси: @weapon.AmmoType</p>
+                            <p>Калибър: @weapon.AmmoCaliber</p>
+                            <input type="hidden" name="selectedEventIds" id="selectedEventIds">
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+

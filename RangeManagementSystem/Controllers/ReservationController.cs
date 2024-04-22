@@ -5,6 +5,7 @@ using RangeManagementSystem.Data.Models;
 using RangeManagementSystem.Data;
 using RangeManagementSystem.Web.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace RangeManagementSystem.Web.Controllers
 {
@@ -20,36 +21,43 @@ namespace RangeManagementSystem.Web.Controllers
             UserManager<ApplicationUser> userManager,
             IMapper mapper)
         {
-
             _dbContext = dbContext;
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
         }
 
-        public ActionResult Index(ReservationViewModel model)
+        public ActionResult List()
         {
-            CreateWeaponReservations(model);
-            return Ok();
+            var resr = _dbContext.Reservations.Where(x=> x.EndTime >=  DateTime.UtcNow).ToList();
+            var mapped = _mapper.Map<List<ReservationDataViewModel>>(resr);
+            return View(new ReservationListViewModel { Reservations = mapped});
         }
 
-        private void CreateWeaponReservations(ReservationViewModel model)
+        public ActionResult ListReturned()
         {
-            var id = _userManager.GetUserId(User);
-            foreach (var item in model.Weapons)
-            {
-                var resr = new Reservation
-                {
-                    WeaponId = item.Key,
-                    StartTime = model.StartDate,
-                    EndTime = model.EndDate,
-                    ApplicationUserId = id,
-                };
-
-                _dbContext.Reservations.Add(resr);
-            }
-            _dbContext.SaveChanges();
+            var resr = _dbContext.Reservations.Where(x => x.EndTime <DateTime.UtcNow).ToList();
+            var mapped = _mapper.Map<List<ReservationDataViewModel>>(resr);
+            return View(new ReservationListViewModel { Reservations = mapped });
         }
+
+        //private void CreateWeaponReservations(ReservationViewModel model)
+        //{
+        //    var id = _userManager.GetUserId(User);
+        //    foreach (var item in model.Weapons)
+        //    {
+        //        var resr = new Reservation
+        //        {
+        //            WeaponId = item.Key,
+        //            StartTime = model.StartDate,
+        //            EndTime = model.EndDate,
+        //            ApplicationUserId = id,
+        //        };
+
+        //        _dbContext.Reservations.Add(resr);
+        //    }
+        //    _dbContext.SaveChanges();
+        //}
 
         public ActionResult MyReservation(string id)
         {
